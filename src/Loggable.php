@@ -1,5 +1,5 @@
 <?php
-namespace tectiv3\Loggable;
+namespace tectiv3;
 
 use tectiv3\Loggable\Models\Log;
 
@@ -29,7 +29,7 @@ trait Loggable {
         static::updated(function ($model) {
             $attributes = $model->getDirty();
             unset($attributes['updated_at']);
-		    Log::save_event($model, 'update', implode(',', array_keys($attributes)));
+		    Log::save_event($model, 'update', 'Updated: ' . implode(',', array_keys($attributes)));
         });
 
         static::deleted(function($model) {
