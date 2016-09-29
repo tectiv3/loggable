@@ -36,7 +36,7 @@ class DemoModel extends \Eloquent {
 //then inside the loop you can access the user with ->user property
 
 foreach($model->logs as $log){
-    echo $log->getModelName().' || '.$log->type;
+    echo $log->entity . ' || ' . $log->action;
     echo '<br>';
     echo 'By :'.$log->user->name.' at '.$log->created_at;
 }

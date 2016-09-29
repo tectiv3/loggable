@@ -22,8 +22,8 @@ class Log extends Eloquent {
         return $this->belongsTo('App\User');
     }
 
-    public function getModelName() {
-        return $this->entity;
+    public function model() {
+        return $this->entity::withTrashed()->find($this->entity_id);
     }
 
     public static function save_event($model, $type, $notes = '') {
