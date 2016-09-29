@@ -1,5 +1,5 @@
 <?php
-namespace tectiv3;
+namespace tectiv3\Loggable;
 
 use tectiv3\Loggable\Models\Log;
 
