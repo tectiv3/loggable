@@ -1,5 +1,4 @@
 <?php
-
 namespace tectiv3\Loggable;
 
 use tectiv3\Loggable\Models\Log;
@@ -7,59 +6,38 @@ use tectiv3\Loggable\Models\Log;
 trait Loggable {
 
     public function logs() {
-        return $this->morphMany(Log::class, 'loggable');
+        return $this->morphMany(Log::class, 'loggable', 'entity', 'entity_id');
     }
 
-    public static function bootLoggableModelTrait() {
-        /*if the table has user_id just set it to current id*/
+    public static function bootLoggable() {
         static::creating(function($model) {
-            /*$model->user_id = \Auth::id();*/
-            if(method_exists($model, 'beforeCreate')) {
+            if (method_exists($model, 'beforeCreate')) {
                 $model->beforeCreate();
             }
         });
 
-        /*if the table has user_id just set it to current id*/
         static::updating(function($model) {
-            if(method_exists($model, 'beforeUpdate')) {
+            if (method_exists($model, 'beforeUpdate')) {
                 $model->beforeUpdate();
             }
-            /*$model->user_id = \Auth::id();*/
         });
 
         static::created(function ($model) {
-            $logData = $model->getLogData();
-            $model->logs()->save(new Log(array(
-                'loggable_route' => @$logData['routeName'],
-                'log_entry' => @$model->$logData['title'],
-                'log_entry_for' => @$logData['modelName'],
-                'log_entry_type' => 'created',
-                'user_id' => @$logData['user']
-            )));
+		    Log::save_event($model, 'create');
         });
 
         static::updated(function ($model) {
-            $logData = $model->getLogData();
-            /*print_r($logData);
-            die();*/
-            $model->logs()->save(new Log(array(
-                'loggable_route' => @$logData['routeName'],
-                'log_entry' => @$model->$logData['title'],
-                'log_entry_for' => @$logData['modelName'],
-                'log_entry_type' => 'updated',
-                'user_id' => @$logData['user']
-            )));
+            $attributes = $model->getDirty();
+            unset($attributes['updated_at']);
+		    Log::save_event($model, 'update', implode(',', array_keys($attributes)));
         });
 
-        static::deleting(function($model) {
-            $logData = $model->getLogData();
-            $model->logs()->save(new Log(array(
-                'loggable_route' => '',
-                'log_entry' => @$model->$logData['title'],
-                'log_entry_for' => @$logData['modelName'],
-                'log_entry_type' => 'deleted',
-                'user_id' => @$logData['user']
-            )));
+        static::deleted(function($model) {
+            Log::save_event($model, 'delete');
+        });
+
+        static::restored(function ($self) {
+		    Log::save_event($model, 'restore');
         });
     }
 } 
