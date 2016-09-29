@@ -1,46 +1,27 @@
 {
-    "name": "themightysapien/loggable",
+    "name": "tectiv3/loggable",
     "description": ":This packages allows the laravel models to have automatic logging",
     "keywords": [
-        "themightysapien",
         "loggable",
         "laravel",
         "logs"
     ],
-    "homepage": "https://github.com/thephpthemightysapien/loggable",
+    "homepage": "https://github.com/tectiv3/loggable",
     "license": "MIT",
     "authors": [
         {
-            "name": "themightysapien",
-            "email": "themightysapien@gmail.com",
-            "homepage": "https://github.com/themightysapien/loggable",
+            "name": "tectiv3",
             "role": "Developer"
         }
     ],
     "require": {
         "php": ">=5.4.0",
-        "illuminate/database": "4.* | 5.*",
-        "illuminate/support": "4.* | 5.*"
-    },
-    "require-dev": {
-        "phpunit/phpunit" : "4.*"
+        "illuminate/database": "~5.2",
+        "illuminate/support": "~5.2"
     },
     "autoload": {
         "psr-4": {
-            "Themightysapien\\Loggable\\": "src"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Themightysapien\\Loggable\\Test\\": "tests"
-        }
-    },
-    "scripts": {
-        "test": "phpunit"
-    },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "1.0-dev"
+            "tectiv3\\Loggable\\": "src"
         }
     }
 }

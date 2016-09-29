@@ -1,49 +1,34 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: zorro
- * Date: 5/18/2015
- * Time: 7:13 PM
- */
 
-namespace Themightysapien\Loggable\Traits;
+namespace tectiv3\Loggable;
 
+use tectiv3\Loggable\Models\Log;
 
-use Themightysapien\Loggable\Logs\Log;
+trait Loggable {
 
-trait LoggableModelTrait {
-
-    public function logs()
-    {
-        return $this->morphMany('App\Modules\Logs\Log', 'loggable');
+    public function logs() {
+        return $this->morphMany(Log::class, 'loggable');
     }
 
-
-    public static function bootLoggableModelTrait()
-    {
-
-
+    public static function bootLoggableModelTrait() {
         /*if the table has user_id just set it to current id*/
-        static::creating(function($model){
+        static::creating(function($model) {
             /*$model->user_id = \Auth::id();*/
-            if(method_exists($model, 'beforeCreate')){
+            if(method_exists($model, 'beforeCreate')) {
                 $model->beforeCreate();
             }
-
         });
+
         /*if the table has user_id just set it to current id*/
-        static::updating(function($model){
-            if(method_exists($model, 'beforeUpdate')){
+        static::updating(function($model) {
+            if(method_exists($model, 'beforeUpdate')) {
                 $model->beforeUpdate();
             }
             /*$model->user_id = \Auth::id();*/
-
         });
 
         static::created(function ($model) {
             $logData = $model->getLogData();
-            /*print_r($logData);
-            die();*/
             $model->logs()->save(new Log(array(
                 'loggable_route' => @$logData['routeName'],
                 'log_entry' => @$model->$logData['title'],
@@ -52,7 +37,6 @@ trait LoggableModelTrait {
                 'user_id' => @$logData['user']
             )));
         });
-
 
         static::updated(function ($model) {
             $logData = $model->getLogData();
@@ -67,8 +51,7 @@ trait LoggableModelTrait {
             )));
         });
 
-
-        static::deleting(function($model){
+        static::deleting(function($model) {
             $logData = $model->getLogData();
             $model->logs()->save(new Log(array(
                 'loggable_route' => '',

@@ -10,18 +10,16 @@ class CreateLogsTable extends Migration {
 	 *
 	 * @return void
 	 */
-	public function up()
-	{
-        Schema::create('system_logs', function (Blueprint $table) {
+	public function up() {
+        Schema::create('logs', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('loggable_id');
-            $table->string('loggable_type');
-            $table->string('loggable_route');
-            $table->string('log_entry');
-            $table->string('log_entry_for');
-            $table->string('log_entry_type');
-            $table->string('user_id');
+            $table->unsignedInteger('entity_id')->index();
+            $table->string('user_id')->index();
+            $table->string('entity')->index();
+            $table->string('type');
+            $table->string('notes');
             $table->timestamps();
+            $table->softDeletes();
         });
 	}
 
@@ -30,9 +28,8 @@ class CreateLogsTable extends Migration {
 	 *
 	 * @return void
 	 */
-	public function down()
-	{
-		Schema::drop('system_logs');
+	public function down() {
+		Schema::drop('logs');
 	}
 
 }
