@@ -36,8 +36,9 @@ trait Loggable {
             Log::save_event($model, 'delete');
         });
 
-        static::restored(function ($self) {
-		    Log::save_event($model, 'restore');
-        });
+        if (method_exists(get_class(), 'restored'))
+            static::restored(function ($self) {
+                Log::save_event($model, 'restore');
+            });
     }
 } 
