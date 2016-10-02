@@ -23,7 +23,8 @@ class Log extends Eloquent {
     }
 
     public function model() {
-        return $this->entity::withTrashed()->find($this->entity_id) ?: $this->entity_id;
+        $uses = class_uses($this->entity);
+        return isset($uses['Illuminate\Database\Eloquent\SoftDeletes']) ? $this->entity::withTrashed()->find($this->entity_id) : $this->entity_id;
     }
 
     public static function save_event($model, $type, $notes = '') {
