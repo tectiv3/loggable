@@ -28,7 +28,7 @@ trait Loggable {
 
         static::updated(function ($model) {
             $attributes = $model->getDirty();
-            unset($attributes['updated_at']);
+            unset($attributes['updated_at'], $attributes['updated']);
 		    Log::save_event($model, 'update', 'Updated: ' . implode(',', array_keys($attributes)));
         });
 
