@@ -23,14 +23,19 @@ trait Loggable {
         });
 
         static::created(function ($model) {
-		    Log::save_event($model, 'create');
+            Log::save_event($model, 'create');
         });
 
         static::updated(function ($model) {
-            $attributes = $model->getDirty();
-            unset($attributes['updated_at'], $attributes['updated']);
+            $attributes     = $model->getDirty();
+            $update_exclude = ['updated_at', 'updated'];
+            $update_exclude = isset($model->update_exclude) ? array_merge($update_exclude, $model->update_exclude) : $update_exclude;
+            array_unique($update_exclude);
+            foreach ($update_exclude as $exclude) {
+                unset($attributes[$exclude]);
+            }
             if (empty($attributes)) return;
-		    Log::save_event($model, 'update', 'Updated: ' . implode(',', array_keys($attributes)));
+            Log::save_event($model, 'update', 'Updated: ' . implode(',', array_keys($attributes)));
         });
 
         static::deleted(function($model) {
