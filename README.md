@@ -3,18 +3,17 @@
 
 Loggable is a Laravel 5 package which helps users to keep simple log of their model CRUD operations. .
 
-## Install
-
-Via Composer
+## Installation
 
 ``` bash
 $ composer require tectiv3/loggable
 ```
-Add the service provider to the providers array in app.php
+
+* Add the service provider to the providers array in app.php
 ``` bash
 tectiv3\Loggable\ServiceProvider::class
 
-//Then do vendor:publish from the artisan command to copy the migration file migrate it
+//Then do vendor:publish from the artisan command to copy the migration file and run migrate command
 php artisan vendor:publish --provider="tectiv3\Loggable\ServiceProvider"
 php artisan migrate
 ```
@@ -28,7 +27,6 @@ class DemoModel extends \Eloquent {
     use Loggable;
 }
 
-``` php
 //for all logs loop through \tectiv3\Loggable\Log::all() or filter it however you like
 
 //for model specific logs you can call $model->logs to get model specific logs
@@ -40,6 +38,7 @@ foreach($model->logs as $log){
     echo '<br>';
     echo 'By :'.$log->user->name.' at '.$log->created_at;
 }
+```
 
 ## Credits
 
